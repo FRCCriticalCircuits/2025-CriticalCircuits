@@ -31,10 +31,10 @@ public class Constants {
 
     public class TUNED_CONSTANTS{
         public class DRIVEBASE{
-            public static double DRIVE_PID_P = 0;
+            public static double DRIVE_PID_P = 0.1;
             public static double DRIVE_PID_I = 0;
-            public static double DRIVE_FEED_FORWARD_KS = 0;
-            public static double DRIVE_FEED_FORWARD_KV = 0;
+            public static double DRIVE_FEED_FORWARD_KS = 0.015;
+            public static double DRIVE_FEED_FORWARD_KV = 0.17; // 0.17V -> RPM
             public static double DRIVE_FEED_FORWARD_KA = 0;
 
             public static double TURN_PID_P = 0.3;
@@ -45,6 +45,7 @@ public class Constants {
 
     public class PHYSICAL_CONSTANTS {
         public static double NOMINAL_VOLTAGE = 12;
+        
         public static double FIELD_LENGTH = 16.54;
         public static double FIELD_WIDTH = 8.21;
         
@@ -85,7 +86,7 @@ public class Constants {
             ); 
 
             public static double MAX_ANGULAR_SPEED_RAD = Math.PI * 3; // 1.5 * 360 Deg
-            public static double MAX_SPEED_METERS = 4.87;
+            public static double MAX_SPEED_METERS = 6.46;
         }
 
         public static double GYRO_FACTOR = -1;

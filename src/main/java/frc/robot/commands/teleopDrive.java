@@ -3,7 +3,6 @@ package frc.robot.commands;
 import java.util.function.Supplier;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants.PHYSICAL_CONSTANTS;
@@ -79,7 +78,7 @@ public class teleopDrive extends Command{
         rotSpeed = omegaLimiter.calculate(rotSpeed) * PHYSICAL_CONSTANTS.DRIVEBASE.MAX_ANGULAR_SPEED_RAD;
 
         ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotSpeed, swerveSubsystem.getGyroRotation2D());
-        swerveSubsystem.setModuleStates(speeds);
+        swerveSubsystem.setModuleStates(speeds, false);
     } 
 
     /**

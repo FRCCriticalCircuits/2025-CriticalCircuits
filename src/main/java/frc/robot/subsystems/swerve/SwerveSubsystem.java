@@ -13,8 +13,12 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
@@ -36,14 +40,12 @@ public class SwerveSubsystem extends SubsystemBase{
     private SwerveDrivePoseEstimator poseEstimator;
 
     // telemetry
-    // private Field2d estimateField = new Field2d();
-
-    // private StructArrayPublisher<SwerveModuleState> currentSwerveStatePublisher;
-    // private StructArrayPublisher<SwerveModuleState> desireSwerveStatePublisher;
+    private Field2d estimateField = new Field2d();
+    private StructArrayPublisher<SwerveModuleState> currentSwerveStatePublisher;
+    private StructArrayPublisher<SwerveModuleState> desireSwerveStatePublisher;
 
     private SwerveSubsystem(){
         gyro = new Canandgyro(DEVICE_ID.DRIVEBASE.GYRO_CAN_ID);
-        //CanandEventLoop.getInstance();
 
         // Swerve Modules
         frontLeft = new SwerveModule(
@@ -134,8 +136,8 @@ public class SwerveSubsystem extends SubsystemBase{
         );
 
         // Telemetry
-        // currentSwerveStatePublisher = NetworkTableInstance.getDefault().getStructArrayTopic("/SwerveStates/CurrentState", SwerveModuleState.struct).publish();
-        // desireSwerveStatePublisher = NetworkTableInstance.getDefault().getStructArrayTopic("/SwerveStates/DesiredState", SwerveModuleState.struct).publish();
+        currentSwerveStatePublisher = NetworkTableInstance.getDefault().getStructArrayTopic("/SwerveStates/CurrentState", SwerveModuleState.struct).publish();
+        desireSwerveStatePublisher = NetworkTableInstance.getDefault().getStructArrayTopic("/SwerveStates/DesiredState", SwerveModuleState.struct).publish();
     }
 
     public static SwerveSubsystem getInstance(){
@@ -206,7 +208,7 @@ public class SwerveSubsystem extends SubsystemBase{
         rearRight.setState(states[3], isOpenLoop);
 
         // telemetry
-        // desireSwerveStatePublisher.set(states);
+        desireSwerveStatePublisher.set(states);
     }
 
     /**
@@ -223,10 +225,10 @@ public class SwerveSubsystem extends SubsystemBase{
     /**
      * set the state of four modules with a {@link ChassisSpeeds} object
      * @param states the desired {@link ChassisSpeeds} speed
-     * @apiNote uses for pathpalnner, openloop by defualt
+     * @apiNote uses for pathpalnner, closeloop by defualt
      */
     public void setModuleStates(ChassisSpeeds speeds){
-        setModuleStates(speeds, true);
+        setModuleStates(speeds, false);
     }
 
     /**
@@ -258,8 +260,9 @@ public class SwerveSubsystem extends SubsystemBase{
         updatePoseEstimator();
 
         // Telemetry
-        // estimateField.setRobotPose(getPoseEstimate());
-        // currentSwerveStatePublisher.set(getSwerveModuleStates());
-        // SmartDashboard.putData("Estimate Field", estimateField);
+        estimateField.setRobotPose(getPoseEstimate());
+        SmartDashboard.putData("Estimate Field", estimateField);
+
+        currentSwerveStatePublisher.set(getSwerveModuleStates());
     }
 }

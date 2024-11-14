@@ -5,6 +5,7 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.VelocityDutyCycle;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
@@ -218,7 +219,7 @@ public class SwerveModule {
      * @param speed the optimized {@link SwerveModuleState}'s speed
      * @param isDutyCycle control mode, true for {@link DutyCycleOut} Control, false for {@link VelocityDutyCycle}
      */
-    private void setDrive(double speed, boolean isDutyCycle) {
+    public void setDrive(double speed, boolean isDutyCycle) {
         if(isDutyCycle){
             dutyCycle.Output = speed / PHYSICAL_CONSTANTS.DRIVEBASE.MAX_SPEED_METERS;
             driveMotor.setControl(dutyCycle);
@@ -234,10 +235,18 @@ public class SwerveModule {
     }
 
     /**
+     * Uses for SysID tuning
+     * @param voltage voltage output
+     */
+    public void setDriveVoltage(double voltage){
+        driveMotor.setControl(new VoltageOut(voltage));
+    }
+
+    /**
      * set the angle for turn
      * @param desireAngle the optimized {@link SwerveModuleState}'s angle in radians
      */
-    private void setTurn(double desireAngle){
+    public void setTurn(double desireAngle){
         turnMotor.set(turnPID.calculate(getTurnAngleRad(), desireAngle));
     }
 
@@ -248,7 +257,7 @@ public class SwerveModule {
      */
     public void setState(SwerveModuleState desireState, boolean isDutyCycle){
         /* Stop Module if speed < 1% */
-         if(Math.abs(desireState.speedMetersPerSecond) < 0.05){
+        if(Math.abs(desireState.speedMetersPerSecond) < 0.05){
             stopModule();
             return;
         }
