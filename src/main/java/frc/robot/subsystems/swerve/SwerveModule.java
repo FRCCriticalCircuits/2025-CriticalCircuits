@@ -31,8 +31,8 @@ import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.PerUnit;
 import edu.wpi.first.units.TimeUnit;
 import edu.wpi.first.units.Units;
-import frc.robot.constants.Constants.PHYSICAL_CONSTANTS;
-import frc.robot.constants.Constants.TUNED_CONSTANTS;
+import frc.robot.Constants.PHYSICAL_CONSTANTS;
+import frc.robot.Constants.TUNED_CONSTANTS;
 import frc.robot.utils.Conversions.WheelConversions;
 
 public class SwerveModule {

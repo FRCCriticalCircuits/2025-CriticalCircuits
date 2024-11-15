@@ -21,9 +21,8 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.constants.Constants;
-import frc.robot.constants.Constants.DEVICE_ID;
-import frc.robot.constants.Constants.PHYSICAL_CONSTANTS;
+import frc.robot.Constants.DEVICE_ID;
+import frc.robot.Constants.PHYSICAL_CONSTANTS;
 import frc.robot.utils.DriveStationIO.DriveStationIO;
 import frc.robot.utils.Math.AdvancedPose2D;
 
@@ -99,7 +98,7 @@ public class SwerveSubsystem extends SubsystemBase{
 
         // Pose Estimator
         poseEstimator = new SwerveDrivePoseEstimator(
-            Constants.PHYSICAL_CONSTANTS.DRIVEBASE.KINEMATICS, 
+            PHYSICAL_CONSTANTS.DRIVEBASE.KINEMATICS, 
             getGyroRotation2D(),
             getSwerveModulePositions(),
             DriveStationIO.getInstance().isBlue()   ? initPose 

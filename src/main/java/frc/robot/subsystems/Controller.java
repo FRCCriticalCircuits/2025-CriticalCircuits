@@ -3,7 +3,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.constants.Constants.DEVICE_ID;
+import frc.robot.Constants.DEVICE_ID;
 
 public class Controller extends SubsystemBase{
     public static Controller instance;
