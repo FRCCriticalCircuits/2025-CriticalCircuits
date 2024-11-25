@@ -11,9 +11,12 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.teleopDrive;
 import frc.robot.subsystems.Controller;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
+import frc.robot.subsystems.led.LEDSubsystem;
 
 public class RobotContainer {
   SwerveSubsystem swerveSubsystem = SwerveSubsystem.getInstance();
+  LEDSubsystem ledSubsystem = LEDSubsystem.getInstance();
+
   Controller controller = Controller.getInstance();
   CommandXboxController driveController = new CommandXboxController(0); 
 

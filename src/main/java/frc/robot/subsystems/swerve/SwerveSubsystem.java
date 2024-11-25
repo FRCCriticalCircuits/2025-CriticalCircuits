@@ -261,6 +261,7 @@ public class SwerveSubsystem extends SubsystemBase{
         // Telemetry
         estimateField.setRobotPose(getPoseEstimate());
         SmartDashboard.putData("Estimate Field", estimateField);
+        SmartDashboard.putNumber("Gyro", gyro.getYaw() * Math.PI * 2);
 
         currentSwerveStatePublisher.set(getSwerveModuleStates());
     }
