@@ -3,7 +3,8 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.DEVICE_ID;
+
+import frc.robot.Constants.DeviceID;
 
 public class Controller extends SubsystemBase{
     public static Controller instance;
@@ -13,7 +14,7 @@ public class Controller extends SubsystemBase{
     private RUMBLE_STATE rumbleState = RUMBLE_STATE.DISABLE;
 
     public Controller(){
-        driverController = new XboxController(DEVICE_ID.GAMEPAD_DRIVER);
+        driverController = new XboxController(DeviceID.GAMEPAD_DRIVER);
     }
 
     public static Controller getInstance() {

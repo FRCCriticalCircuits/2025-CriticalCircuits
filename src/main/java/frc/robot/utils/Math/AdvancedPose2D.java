@@ -4,6 +4,8 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 
+import frc.robot.Constants.FieldConstants;
+
 public class AdvancedPose2D extends Pose2d{
     public AdvancedPose2D(Translation2d translation, Rotation2d rotation){
         super(translation, rotation);
@@ -17,10 +19,10 @@ public class AdvancedPose2D extends Pose2d{
         return new Pose2d(this.getTranslation(), this.getRotation());
     }
 
-    public AdvancedPose2D horizontallyFlip(double fieldLength, double fieldWidth){
+    public AdvancedPose2D horizontallyFlip(){
         return new AdvancedPose2D(
             new Translation2d(
-                fieldLength - this.getTranslation().getX(),
+                FieldConstants.FIELD_LENGTH - this.getTranslation().getX(),
                 this.getTranslation().getY()
             ),
             Rotation2d.fromDegrees(

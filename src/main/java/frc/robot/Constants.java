@@ -1,14 +1,16 @@
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
+import frc.robot.utils.Math.AdvancedPose2D;
 
 public class Constants {
-    public class DEVICE_ID{
+    public class DeviceID {
         public static final int GAMEPAD_DRIVER = 0;
         
-        public class DRIVEBASE{
+        public class DriveBase{
             public static final int FRONT_LEFT_DRIVE_ID = 1;
             public static final int FRONT_LEFT_TURN_ID = 2;
             public static final int FRONT_LEFT_CANCODER_ID = 3;
@@ -29,10 +31,11 @@ public class Constants {
         }
     }
 
-    public class TUNED_CONSTANTS{
-        public class DRIVEBASE{
+    public class TunedConstants{
+        public class DriveBase{
             public static double DRIVE_PID_P = 0.1;
             public static double DRIVE_PID_I = 0;
+
             public static double DRIVE_FEED_FORWARD_KS = 0.015;
             public static double DRIVE_FEED_FORWARD_KV = 0.17; // 0.17V -> RPM
             public static double DRIVE_FEED_FORWARD_KA = 0;
@@ -43,13 +46,10 @@ public class Constants {
         }
     }
 
-    public class PHYSICAL_CONSTANTS {
+    public class PhysicalConstants {
         public static double NOMINAL_VOLTAGE = 12;
         
-        public static double FIELD_LENGTH = 16.54;
-        public static double FIELD_WIDTH = 8.21;
-        
-        public class DRIVEBASE {
+        public class DriveBase {
             public class LENGTHS{
                 public static double TRACK_WIDTH_METERS = 0.55245;
                 public static double TRACK_RADIUS_METERS = Math.sqrt((TRACK_WIDTH_METERS * TRACK_WIDTH_METERS) + (TRACK_WIDTH_METERS * TRACK_WIDTH_METERS));
@@ -90,5 +90,12 @@ public class Constants {
         }
 
         public static double GYRO_FACTOR = -1;
+    }
+
+    public class FieldConstants{
+        public static double FIELD_LENGTH = 16.54;
+        public static double FIELD_WIDTH = 8.21;
+
+        public static AdvancedPose2D initPose = new AdvancedPose2D(1.32, 5.55, Rotation2d.fromDegrees(0));
     }
 }

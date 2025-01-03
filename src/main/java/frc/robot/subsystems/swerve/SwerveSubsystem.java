@@ -21,15 +21,14 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.DEVICE_ID;
-import frc.robot.Constants.PHYSICAL_CONSTANTS;
+
 import frc.robot.utils.DriveStationIO.DriveStationIO;
-import frc.robot.utils.Math.AdvancedPose2D;
+import frc.robot.Constants.DeviceID;
+import frc.robot.Constants.FieldConstants;
+import frc.robot.Constants.PhysicalConstants;
 
 public class SwerveSubsystem extends SubsystemBase{
     private static SwerveSubsystem instance;
-
-    AdvancedPose2D initPose = new AdvancedPose2D(1.32, 5.55, Rotation2d.fromDegrees(0));
     
     // Hardwares
     private SwerveModule frontLeft, frontRight, rearLeft, rearRight;
@@ -44,42 +43,42 @@ public class SwerveSubsystem extends SubsystemBase{
     private StructArrayPublisher<SwerveModuleState> desireSwerveStatePublisher;
 
     private SwerveSubsystem(){
-        gyro = new Canandgyro(DEVICE_ID.DRIVEBASE.GYRO_CAN_ID);
+        gyro = new Canandgyro(DeviceID.DriveBase.GYRO_CAN_ID);
 
         // Swerve Modules
         frontLeft = new SwerveModule(
-            DEVICE_ID.DRIVEBASE.FRONT_LEFT_CANCODER_ID, 
-            PHYSICAL_CONSTANTS.DRIVEBASE.CANCODER_OFFSET.FRONT_LEFT_OFFSET, 
-            DEVICE_ID.DRIVEBASE.FRONT_LEFT_DRIVE_ID, 
+            DeviceID.DriveBase.FRONT_LEFT_CANCODER_ID, 
+            PhysicalConstants.DriveBase.CANCODER_OFFSET.FRONT_LEFT_OFFSET, 
+            DeviceID.DriveBase.FRONT_LEFT_DRIVE_ID, 
             true,
-            DEVICE_ID.DRIVEBASE.FRONT_LEFT_TURN_ID,
+            DeviceID.DriveBase.FRONT_LEFT_TURN_ID,
             true
         );
 
         frontRight = new SwerveModule(
-            DEVICE_ID.DRIVEBASE.FRONT_RIGHT_CANCODER_ID, 
-            PHYSICAL_CONSTANTS.DRIVEBASE.CANCODER_OFFSET.FRONT_RIGHT_OFFSET, 
-            DEVICE_ID.DRIVEBASE.FRONT_RIGHT_DRIVE_ID, 
+            DeviceID.DriveBase.FRONT_RIGHT_CANCODER_ID, 
+            PhysicalConstants.DriveBase.CANCODER_OFFSET.FRONT_RIGHT_OFFSET, 
+            DeviceID.DriveBase.FRONT_RIGHT_DRIVE_ID, 
             false,
-            DEVICE_ID.DRIVEBASE.FRONT_RIGHT_TURN_ID, 
+            DeviceID.DriveBase.FRONT_RIGHT_TURN_ID, 
             true
         );
 
         rearLeft = new SwerveModule(
-            DEVICE_ID.DRIVEBASE.REAR_LEFT_CANCODER_ID, 
-            PHYSICAL_CONSTANTS.DRIVEBASE.CANCODER_OFFSET.REAR_LEFT_OFFSET, 
-            DEVICE_ID.DRIVEBASE.REAR_LEFT_DRIVE_ID, 
+            DeviceID.DriveBase.REAR_LEFT_CANCODER_ID, 
+            PhysicalConstants.DriveBase.CANCODER_OFFSET.REAR_LEFT_OFFSET, 
+            DeviceID.DriveBase.REAR_LEFT_DRIVE_ID, 
             true,
-            DEVICE_ID.DRIVEBASE.REAR_LEFT_TURN_ID, 
+            DeviceID.DriveBase.REAR_LEFT_TURN_ID, 
             true
         );
 
         rearRight = new SwerveModule(
-            DEVICE_ID.DRIVEBASE.REAR_RIGHT_CANCODER_ID, 
-            PHYSICAL_CONSTANTS.DRIVEBASE.CANCODER_OFFSET.REAR_RIGHT_OFFSET,
-            DEVICE_ID.DRIVEBASE.REAR_RIGHT_DRIVE_ID,
+            DeviceID.DriveBase.REAR_RIGHT_CANCODER_ID, 
+            PhysicalConstants.DriveBase.CANCODER_OFFSET.REAR_RIGHT_OFFSET,
+            DeviceID.DriveBase.REAR_RIGHT_DRIVE_ID,
             false,
-            DEVICE_ID.DRIVEBASE.REAR_RIGHT_TURN_ID,
+            DeviceID.DriveBase.REAR_RIGHT_TURN_ID,
             true
         );
 
@@ -98,11 +97,11 @@ public class SwerveSubsystem extends SubsystemBase{
 
         // Pose Estimator
         poseEstimator = new SwerveDrivePoseEstimator(
-            PHYSICAL_CONSTANTS.DRIVEBASE.KINEMATICS, 
+            PhysicalConstants.DriveBase.KINEMATICS, 
             getGyroRotation2D(),
             getSwerveModulePositions(),
-            DriveStationIO.getInstance().isBlue()   ? initPose 
-                                                    : initPose.horizontallyFlip(PHYSICAL_CONSTANTS.FIELD_LENGTH, PHYSICAL_CONSTANTS.FIELD_WIDTH)
+            DriveStationIO.isBlue()   ? FieldConstants.initPose 
+                                                    : FieldConstants.initPose.horizontallyFlip()
         );
 
         RobotConfig config = null;
@@ -144,6 +143,14 @@ public class SwerveSubsystem extends SubsystemBase{
         return instance;
     }
 
+    /*
+     * Gyro Methods
+     */
+
+    public Rotation2d getGyroRotation2D(){
+        return gyro.getRotation2d();
+    }
+
     public void resetGyro(double yaw){
         gyro.setYaw(yaw);
     }
@@ -152,12 +159,8 @@ public class SwerveSubsystem extends SubsystemBase{
         gyro.setYaw(0);
     }
 
-    public Rotation2d getGyroRotation2D(){
-        return gyro.getRotation2d();
-    }
-
     /**
-     * get four modules' Position
+     * get position of four modules
      * @return the position in {@link SwerveModulePosition} 
      */
     public SwerveModulePosition[] getSwerveModulePositions() {
@@ -170,7 +173,7 @@ public class SwerveSubsystem extends SubsystemBase{
     }
 
     /**
-     * get four modules' State
+     * get velocity & direction of four modules
      * @return the position in {@link SwerveModuleState} 
      */
     public SwerveModuleState[] getSwerveModuleStates() {
@@ -188,7 +191,7 @@ public class SwerveSubsystem extends SubsystemBase{
      * @apiNote uses for pathplanner
      */
     public ChassisSpeeds getChassisSpeeds() {
-        return PHYSICAL_CONSTANTS.DRIVEBASE.KINEMATICS.toChassisSpeeds(getSwerveModuleStates());
+        return PhysicalConstants.DriveBase.KINEMATICS.toChassisSpeeds(getSwerveModuleStates());
     }
 
     /**
@@ -198,7 +201,7 @@ public class SwerveSubsystem extends SubsystemBase{
      */
     private void setModuleStates(SwerveModuleState[] states, boolean isOpenLoop){
         // normalize wheelspeed to make it smaller than the maximum speed
-        SwerveDriveKinematics.desaturateWheelSpeeds(states, PHYSICAL_CONSTANTS.DRIVEBASE.MAX_SPEED_METERS);
+        SwerveDriveKinematics.desaturateWheelSpeeds(states, PhysicalConstants.DriveBase.MAX_SPEED_METERS);
 
         // apply speeds to each Swerve Module
         frontLeft.setState(states[0], isOpenLoop);
@@ -217,14 +220,14 @@ public class SwerveSubsystem extends SubsystemBase{
      */
     public void setModuleStates(ChassisSpeeds speeds, boolean isOpenLoop){
         speeds = ChassisSpeeds.discretize(speeds, 0.02);
-        SwerveModuleState states[] = PHYSICAL_CONSTANTS.DRIVEBASE.KINEMATICS.toSwerveModuleStates(speeds);
+        SwerveModuleState states[] = PhysicalConstants.DriveBase.KINEMATICS.toSwerveModuleStates(speeds);
         setModuleStates(states, isOpenLoop);
     }
 
     /**
      * set the state of four modules with a {@link ChassisSpeeds} object
      * @param states the desired {@link ChassisSpeeds} speed
-     * @apiNote uses for pathpalnner, closeloop by defualt
+     * @apiNote uses for pathpalnner, CloseLoop by defualt
      */
     public void setModuleStates(ChassisSpeeds speeds){
         setModuleStates(speeds, false);
@@ -239,18 +242,18 @@ public class SwerveSubsystem extends SubsystemBase{
     }
 
     /**
+     * update the {@link SwerveDrivePoseEstimator}
+     */
+    public void updatePoseEstimator() {
+        poseEstimator.update(getGyroRotation2D(), getSwerveModulePositions());
+    }
+
+    /**
      * reset the position of the {@link SwerveDrivePoseEstimator} 
      * @param pose new position in {@link Pose2d}
      */
     public void resetPoseEstimate(Pose2d pose) {
         poseEstimator.resetPosition(getGyroRotation2D(), getSwerveModulePositions(), pose);
-    }
-
-    /**
-     * update the {@link SwerveDrivePoseEstimator}
-     */
-    public void updatePoseEstimator() {
-        poseEstimator.update(getGyroRotation2D(), getSwerveModulePositions());
     }
 
     @Override

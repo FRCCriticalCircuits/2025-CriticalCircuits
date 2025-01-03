@@ -13,10 +13,16 @@ public class LEDSubsystem extends SubsystemBase{
     private AddressableLED m_led;
     private AddressableLEDBuffer m_buffer;
 
-    private LEDPattern m_pattern = LEDPattern.solid(
+    private LEDPattern m_pattern = LEDPattern
+    .solid(
         Colors.white
     )
-    .atBrightness(Percent.of(100)).blink(Seconds.of(0.15));
+    .atBrightness(
+        Percent.of(100)
+    )
+    .blink(
+        Seconds.of(0.15)
+    );
 
     private LEDSubsystem(){
         /* Create Instances */
