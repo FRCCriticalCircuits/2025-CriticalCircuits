@@ -38,12 +38,12 @@ import frc.robot.Constants.TunedConstants;
 
 
 public class SwerveModule {
-    private CANcoder canCoder;
+    public CANcoder canCoder;
 
-    private TalonFX driveMotor;
+    public TalonFX driveMotor;
     private TalonFXConfiguration driveConfig;
 
-    private SparkMax turnMotor;
+    public SparkMax turnMotor;
     private RelativeEncoder turnEncoder;
     private SparkMaxConfig turnConfig;
     private EncoderConfig encoderConfig;
@@ -130,7 +130,7 @@ public class SwerveModule {
         
         /* Gear Ratio */
         encoderConfig.positionConversionFactor((1.0 / PhysicalConstants.DriveBase.GEARS.TURN_GEAR_RATIO) * Math.PI * 2);
-        encoderConfig.velocityConversionFactor((1.0 / PhysicalConstants.DriveBase.GEARS.TURN_GEAR_RATIO) * Math.PI * 2);
+        encoderConfig.velocityConversionFactor((60.0 / PhysicalConstants.DriveBase.GEARS.TURN_GEAR_RATIO) * Math.PI * 2);
 
         /* PID Constructor */
         turnPID = new PIDController(

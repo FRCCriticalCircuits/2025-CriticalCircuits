@@ -101,7 +101,7 @@ public class SwerveSubsystem extends SubsystemBase{
             getGyroRotation2D(),
             getSwerveModulePositions(),
             DriveStationIO.isBlue()   ? FieldConstants.initPose 
-                                                    : FieldConstants.initPose.horizontallyFlip()
+                                      : FieldConstants.initPose.horizontallyFlip()
         );
 
         RobotConfig config = null;
@@ -267,5 +267,18 @@ public class SwerveSubsystem extends SubsystemBase{
         SmartDashboard.putNumber("Gyro", gyro.getYaw() * Math.PI * 2);
 
         currentSwerveStatePublisher.set(getSwerveModuleStates());
+    }
+
+    boolean simulationInitRunned = false;
+
+    public void simulationInit(){
+    }
+
+    @Override
+    public void simulationPeriodic() {
+        if(!simulationInitRunned){
+            simulationInit();
+            simulationInitRunned = true;
+        }
     }
 }
